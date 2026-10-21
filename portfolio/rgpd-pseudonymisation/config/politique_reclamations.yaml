@@ -1,0 +1,53 @@
+# =====================================================================
+# Politique de protection — export « réclamations clients » vers l'équipe Data
+# Toute colonne non listée ici est SUPPRIMÉE (liste blanche).
+# =====================================================================
+traitement:
+  nom: Analyse des motifs de réclamation clients
+  finalite: >
+    Identifier les principaux motifs d'insatisfaction et suivre les délais de traitement
+    afin d'améliorer la qualité de service. Aucune décision individuelle n'est prise sur
+    la base de ce jeu de données.
+  base_legale: Intérêt légitime (art. 6.1.f RGPD)
+  responsable: Direction Relation Client (fictif)
+  destinataires: Équipe Data — usage analytique uniquement
+  duree_conservation: 24 mois à compter de la clôture de la réclamation
+
+colonnes:
+  reclamation_id:  { strategie: conserver,  justification: "Clé technique sans lien direct avec la personne" }
+  date_reclamation: { strategie: conserver, justification: "Nécessaire au suivi des délais" }
+  client_id:
+    strategie: pseudonymiser
+    prefixe: CLI
+    renommer_en: client_pseudo
+    justification: Permet de compter les réclamations d'un même client sans l'identifier
+  nom:            { strategie: supprimer, justification: "Inutile à la finalité (minimisation)" }
+  prenom:         { strategie: supprimer, justification: "Inutile à la finalité (minimisation)" }
+  email:          { strategie: supprimer, justification: "Inutile à la finalité (minimisation)" }
+  telephone:      { strategie: supprimer, justification: "Inutile à la finalité (minimisation)" }
+  iban_remboursement: { strategie: supprimer, justification: "Donnée financière, aucun usage analytique" }
+  numero_secu:    { strategie: supprimer, justification: "NIR — donnée très encadrée, aucun usage analytique" }
+  date_naissance:
+    strategie: generaliser_age
+    reference: 2026-06-30
+    pas: 10
+    renommer_en: tranche_age
+    justification: L'âge exact n'est pas nécessaire, la tranche suffit à segmenter
+  code_postal:
+    strategie: generaliser_code_postal
+    renommer_en: departement
+    justification: Analyse territoriale au niveau du département
+  sexe:           { strategie: conserver, justification: "Analyse des écarts de satisfaction (quasi-identifiant, contrôlé par k-anonymat)" }
+  canal:          { strategie: conserver, justification: "Donnée non personnelle" }
+  motif:          { strategie: conserver, justification: "Donnée non personnelle" }
+  montant_litige: { strategie: conserver, justification: "Donnée non personnelle" }
+  statut:         { strategie: conserver, justification: "Donnée non personnelle" }
+  delai_traitement_j: { strategie: conserver, justification: "Donnée non personnelle" }
+  commentaire:
+    strategie: caviarder_texte
+    justification: Texte libre utile à l'analyse des motifs, mais contenant parfois des coordonnées
+
+k_anonymat:
+  quasi_identifiants: [tranche_age, departement, sexe]
+  k_cible: 5
+  supprimer_classes_rares: true

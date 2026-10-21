@@ -1,0 +1,122 @@
+# =====================================================================
+# Règles de qualité — extrait SIRH (salariés)
+# Les règles sont écrites ici, pas dans le code : un analyste métier peut
+# les lire, les discuter et les faire évoluer sans toucher au Python.
+#
+# severite  : bloquant      -> empêche la publication des données
+#             avertissement -> signalé, mais ne bloque pas
+# tolerance_pct : % de lignes en erreur accepté avant de déclarer la règle KO
+# =====================================================================
+seuil_score_global: 98
+
+jeux_de_donnees:
+
+  services:
+    fichier: data/services.csv
+    cle: service_id
+    regles:
+      - id: SRV-01
+        type: unique
+        colonnes: service_id
+        dimension: Unicité
+        severite: bloquant
+        description: Un identifiant de service est unique
+
+  salaries:
+    fichier: data/salaries.csv
+    cle: matricule
+    regles:
+      # --- Complétude ----------------------------------------------------
+      - id: SAL-01
+        type: non_null
+        colonne: matricule
+        dimension: Complétude
+        severite: bloquant
+        description: Le matricule est renseigné
+      - id: SAL-02
+        type: non_null
+        colonne: service_id
+        dimension: Complétude
+        severite: avertissement
+        tolerance_pct: 1
+        description: Le service d'affectation est renseigné
+
+      # --- Unicité -------------------------------------------------------
+      - id: SAL-03
+        type: unique
+        colonnes: matricule
+        dimension: Unicité
+        severite: bloquant
+        description: Un matricule n'apparaît qu'une fois
+
+      # --- Validité ------------------------------------------------------
+      - id: SAL-04
+        type: format
+        colonne: email
+        motif: '[a-z0-9._-]+@[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}'
+        dimension: Validité
+        severite: avertissement
+        tolerance_pct: 0.5
+        description: L'email professionnel a un format valide
+      - id: SAL-05
+        type: valeurs_autorisees
+        colonne: type_contrat
+        valeurs: [CDI, CDD, Alternance, Intérim]
+        dimension: Validité
+        severite: bloquant
+        description: Le type de contrat appartient au référentiel
+      - id: SAL-06
+        type: format
+        colonne: code_postal
+        motif: '\d{5}'
+        dimension: Validité
+        severite: avertissement
+        tolerance_pct: 1
+        description: Le code postal comporte 5 chiffres
+      - id: SAL-07
+        type: date_valide
+        colonne: date_naissance
+        pas_dans_le_futur: true
+        dimension: Validité
+        severite: bloquant
+        description: La date de naissance est lisible et pas dans le futur
+      - id: SAL-08
+        type: intervalle
+        colonne: salaire_brut_annuel
+        min: 0
+        max: 250000
+        dimension: Validité
+        severite: bloquant
+        description: Le salaire est un montant positif et plausible
+
+      # --- Cohérence -----------------------------------------------------
+      - id: SAL-09
+        type: ordre_dates
+        avant: date_entree
+        apres: date_sortie
+        dimension: Cohérence
+        severite: bloquant
+        description: La date d'entrée précède la date de sortie
+      - id: SAL-10
+        type: cle_etrangere
+        colonne: service_id
+        reference: services
+        colonne_reference: service_id
+        dimension: Cohérence
+        severite: bloquant
+        description: Le service existe dans le référentiel des services
+      - id: SAL-11
+        type: cle_etrangere
+        colonne: manager_matricule
+        reference: salaries
+        colonne_reference: matricule
+        dimension: Cohérence
+        severite: avertissement
+        tolerance_pct: 0.5
+        description: Le manager est un salarié connu
+      - id: SAL-12
+        type: expression
+        condition: "type_contrat == 'Alternance' or salaire_brut_annuel >= 21000 or salaire_brut_annuel < 0"
+        dimension: Cohérence
+        severite: avertissement
+        description: Hors alternance, le salaire annuel est au moins égal au SMIC

@@ -1,0 +1,9 @@
+# Configuration du pipeline (aucun chemin ni seuil "en dur" dans le code)
+chemins:
+  raw: data/raw
+  entrepot: data/warehouse/centre_contact.duckdb
+
+qualite:
+  # Au-delà de ce taux de lignes rejetées, le chargement est bloqué :
+  # mieux vaut un entrepôt d'hier fiable qu'un entrepôt du jour faux.
+  taux_rejet_max: 0.05

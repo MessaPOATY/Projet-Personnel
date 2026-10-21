@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rapport qualité des données</title>
+<style>
+ :root { --fond:#f6f7f9; --carte:#fff; --texte:#1d2330; --doux:#667085; --bord:#e4e7ec; }
+ @media (prefers-color-scheme: dark) { :root { --fond:#12151c; --carte:#1b2029; --texte:#e6e8ec; --doux:#98a2b3; --bord:#2c3340; } }
+ body { font-family: system-ui, sans-serif; background:var(--fond); color:var(--texte); margin:0; padding:32px 16px; }
+ main { max-width:1200px; margin:auto; }
+ h1 { margin:0 0 4px; } .sous { color:var(--doux); margin-bottom:24px; }
+ .verdict { padding:14px 18px; border-radius:10px; background:var(--carte); border:1px solid var(--bord); margin-bottom:20px; font-weight:600; }
+ .grille { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; margin-bottom:24px; }
+ .carte { background:var(--carte); border:1px solid var(--bord); border-radius:10px; padding:14px; display:flex; flex-direction:column; gap:6px; }
+ .carte span { color:var(--doux); font-size:13px; } .carte strong { font-size:26px; }
+ .tableau { overflow-x:auto; background:var(--carte); border:1px solid var(--bord); border-radius:10px; }
+ table { border-collapse:collapse; width:100%; font-size:14px; }
+ th, td { padding:10px 12px; border-bottom:1px solid var(--bord); text-align:left; vertical-align:top; }
+ th { font-size:12px; text-transform:uppercase; color:var(--doux); }
+ code { white-space:nowrap; }
+ .num { font-variant-numeric:tabular-nums; white-space:nowrap; }
+ .barre { width:110px; height:8px; background:var(--bord); border-radius:4px; overflow:hidden; }
+ .barre div { height:100%; }
+ .badge { padding:3px 8px; border-radius:20px; font-size:12px; font-weight:600; white-space:nowrap; }
+ .ok { background:#d9f2e4; color:#1a7f4b; } .warn { background:#fdf0d5; color:#8a5a00; } .ko { background:#fbe0dd; color:#a12a1f; }
+ .ex { font-family:ui-monospace,monospace; font-size:12px; color:var(--doux); }
+</style></head><body><main>
+ <h1>Rapport qualité des données</h1>
+ <div class="sous">Contrôle du 21/10/2026 à 18:03 · 1511 lignes · 13 règles</div>
+ <div class="verdict">⛔ Publication bloquée — 6 contrôle(s) bloquant(s) en échec</div>
+ <div class="grille">
+   <div class="carte"><span>Score global</span><strong style="color:#1a7f4b">99.6 %</strong></div>
+   <div class="carte"><span>Complétude</span><strong style="color:#1a7f4b">99.7 %</strong></div><div class="carte"><span>Unicité</span><strong style="color:#1a7f4b">99.7 %</strong></div><div class="carte"><span>Validité</span><strong style="color:#1a7f4b">99.6 %</strong></div><div class="carte"><span>Cohérence</span><strong style="color:#1a7f4b">99.6 %</strong></div>
+ </div>
+ <div class="tableau"><table>
+  <thead><tr><th>Règle</th><th>Jeu</th><th>Description</th><th>Dimension</th><th>Erreurs</th><th>Conformité</th><th>Statut</th><th>Exemples (clés)</th></tr></thead>
+  <tbody>
+        <tr>
+          <td><code>SAL-03</code></td><td>salaries</td><td>Un matricule n&#x27;apparaît qu&#x27;une fois</td>
+          <td>Unicité</td>
+          <td class="num">8 / 1504</td>
+          <td><div class="barre"><div style="width:99.47%;background:#1a7f4b"></div></div>
+              <small>99.47 %</small></td>
+          <td><span class="badge ko">Bloquant</span></td>
+          <td class="ex">M00129, M00431, M00532, M00867, M00532</td>
+        </tr>
+        <tr>
+          <td><code>SAL-09</code></td><td>salaries</td><td>La date d&#x27;entrée précède la date de sortie</td>
+          <td>Cohérence</td>
+          <td class="num">7 / 1504</td>
+          <td><div class="barre"><div style="width:99.53%;background:#1a7f4b"></div></div>
+              <small>99.53 %</small></td>
+          <td><span class="badge ko">Bloquant</span></td>
+          <td class="ex">M00159, M00234, M00282, M00433, M00891</td>
+        </tr>
+        <tr>
+          <td><code>SAL-05</code></td><td>salaries</td><td>Le type de contrat appartient au référentiel</td>
+          <td>Validité</td>
+          <td class="num">6 / 1504</td>
+          <td><div class="barre"><div style="width:99.6%;background:#1a7f4b"></div></div>
+              <small>99.60 %</small></td>
+          <td><span class="badge ko">Bloquant</span></td>
+          <td class="ex">M00613, M00789, M00902, M01080, M01304</td>
+        </tr>
+        <tr>
+          <td><code>SAL-10</code></td><td>salaries</td><td>Le service existe dans le référentiel des services</td>
+          <td>Cohérence</td>
+          <td class="num">5 / 1504</td>
+          <td><div class="barre"><div style="width:99.67%;background:#1a7f4b"></div></div>
+              <small>99.67 %</small></td>
+          <td><span class="badge ko">Bloquant</span></td>
+          <td class="ex">M00186, M00511, M00627, M00699, M01232</td>
+        </tr>
+        <tr>
+          <td><code>SAL-07</code></td><td>salaries</td><td>La date de naissance est lisible et pas dans le futur</td>
+          <td>Validité</td>
+          <td class="num">4 / 1504</td>
+          <td><div class="barre"><div style="width:99.73%;background:#1a7f4b"></div></div>
+              <small>99.73 %</small></td>
+          <td><span class="badge ko">Bloquant</span></td>
+          <td class="ex">M00259, M00336, M00419, M00941</td>
+        </tr>
+        <tr>
+          <td><code>SAL-08</code></td><td>salaries</td><td>Le salaire est un montant positif et plausible</td>
+          <td>Validité</td>
+          <td class="num">3 / 1504</td>
+          <td><div class="barre"><div style="width:99.8%;background:#1a7f4b"></div></div>
+              <small>99.80 %</small></td>
+          <td><span class="badge ko">Bloquant</span></td>
+          <td class="ex">M00180, M00326, M00405</td>
+        </tr>
+        <tr>
+          <td><code>SAL-04</code></td><td>salaries</td><td>L&#x27;email professionnel a un format valide</td>
+          <td>Validité</td>
+          <td class="num">12 / 1504</td>
+          <td><div class="barre"><div style="width:99.2%;background:#1a7f4b"></div></div>
+              <small>99.20 %</small></td>
+          <td><span class="badge warn">À surveiller</span></td>
+          <td class="ex">M00126, M00178, M00259, M00398, M00428</td>
+        </tr>
+        <tr>
+          <td><code>SAL-11</code></td><td>salaries</td><td>Le manager est un salarié connu</td>
+          <td>Cohérence</td>
+          <td class="num">9 / 1504</td>
+          <td><div class="barre"><div style="width:99.4%;background:#1a7f4b"></div></div>
+              <small>99.40 %</small></td>
+          <td><span class="badge warn">À surveiller</span></td>
+          <td class="ex">M00385, M00416, M00437, M00536, M00672</td>
+        </tr>
+        <tr>
+          <td><code>SAL-12</code></td><td>salaries</td><td>Hors alternance, le salaire annuel est au moins égal au SMIC</td>
+          <td>Cohérence</td>
+          <td class="num">5 / 1504</td>
+          <td><div class="barre"><div style="width:99.67%;background:#1a7f4b"></div></div>
+              <small>99.67 %</small></td>
+          <td><span class="badge warn">À surveiller</span></td>
+          <td class="ex">M00882, M01031, M01163, M01291, M01416</td>
+        </tr>
+        <tr>
+          <td><code>SRV-01</code></td><td>services</td><td>Un identifiant de service est unique</td>
+          <td>Unicité</td>
+          <td class="num">0 / 7</td>
+          <td><div class="barre"><div style="width:100.0%;background:#1a7f4b"></div></div>
+              <small>100.00 %</small></td>
+          <td><span class="badge ok">Conforme</span></td>
+          <td class="ex">—</td>
+        </tr>
+        <tr>
+          <td><code>SAL-01</code></td><td>salaries</td><td>Le matricule est renseigné</td>
+          <td>Complétude</td>
+          <td class="num">0 / 1504</td>
+          <td><div class="barre"><div style="width:100.0%;background:#1a7f4b"></div></div>
+              <small>100.00 %</small></td>
+          <td><span class="badge ok">Conforme</span></td>
+          <td class="ex">—</td>
+        </tr>
+        <tr>
+          <td><code>SAL-02</code></td><td>salaries</td><td>Le service d&#x27;affectation est renseigné</td>
+          <td>Complétude</td>
+          <td class="num">8 / 1504</td>
+          <td><div class="barre"><div style="width:99.47%;background:#1a7f4b"></div></div>
+              <small>99.47 %</small></td>
+          <td><span class="badge ok">Conforme</span></td>
+          <td class="ex">M00165, M00297, M00493, M00738, M01279</td>
+        </tr>
+        <tr>
+          <td><code>SAL-06</code></td><td>salaries</td><td>Le code postal comporte 5 chiffres</td>
+          <td>Validité</td>
+          <td class="num">6 / 1504</td>
+          <td><div class="barre"><div style="width:99.6%;background:#1a7f4b"></div></div>
+              <small>99.60 %</small></td>
+          <td><span class="badge ok">Conforme</span></td>
+          <td class="ex">M00238, M00601, M00631, M00876, M01030</td>
+        </tr></tbody>
+ </table></div>
+</main></body></html>
